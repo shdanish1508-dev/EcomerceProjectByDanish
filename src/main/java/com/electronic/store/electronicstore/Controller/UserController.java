@@ -1,0 +1,95 @@
+package com.electronic.store.electronicstore.Controller;
+
+
+import com.electronic.store.electronicstore.Dtos.ApiResponsemessage;
+import com.electronic.store.electronicstore.Dtos.UserDto;
+import com.electronic.store.electronicstore.Entity.User;
+import com.electronic.store.electronicstore.Service.UserService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/users")
+public class UserController {
+    
+
+    @Autowired
+    private UserService userService;
+    //create
+
+    @PostMapping
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto)
+    {
+       UserDto userDto1= userService.createUser(userDto);
+       return new ResponseEntity<>(userDto1, HttpStatus.CREATED);
+    }
+
+
+    @PutMapping("/{userId}")
+    public  ResponseEntity<UserDto> updateUser(
+            @PathVariable("userId") String userId,
+           @Valid @RequestBody UserDto userDto)
+    {
+         UserDto updatedUserDto =    userService.updateUser(userDto, userId);
+         return new ResponseEntity<>(updatedUserDto, HttpStatus.OK);
+    }
+
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<ApiResponsemessage> deleteUser(@PathVariable String userId  )
+    {
+        userService.deleteUser(userId);
+
+     ApiResponsemessage message=   ApiResponsemessage.builder().message("User deleted successfully"). success(true).status(HttpStatus.OK).build();
+        return new ResponseEntity<>( message, HttpStatus.OK);
+    }
+
+
+
+    @GetMapping
+    public  ResponseEntity<List<UserDto>> getAllUser(
+
+       @RequestParam( value="pageNumber", defaultValue = "0", required = false) int pageNumber,
+       @RequestParam( value = "pageSize", defaultValue = "10",required = false) int pageSize,
+       @RequestParam( value="sortBy", defaultValue = "name", required = false) int SortBy,
+       @RequestParam( value = "sortDir", defaultValue = "asc",required = false) int SortDir ,
+
+    )
+    {
+        return  new ResponseEntity<>(userService.getAllUsers(pageNumber,pageSize,SortBy,SortDir),HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}")
+
+    public ResponseEntity<UserDto>getUser(
+            @PathVariable
+            String userId)
+    {
+        return  new ResponseEntity<>(userService.getUserById(userId),HttpStatus.OK);
+    }
+
+
+    @GetMapping("/email/{email}")
+
+    public ResponseEntity<UserDto>getUserByEmail(
+            @PathVariable
+            String email)
+    {
+        return  new ResponseEntity<>(userService.getUserByEmail(email),HttpStatus.OK);
+    }
+
+
+    @GetMapping("/search/{keyword}")
+
+    public ResponseEntity<List<UserDto>>searchUser(
+            @PathVariable
+            String keyword)
+    {
+        return  new ResponseEntity<>(userService.searchUser(keyword),HttpStatus.OK);
+    }
+}
