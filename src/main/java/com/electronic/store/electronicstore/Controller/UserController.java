@@ -2,6 +2,7 @@ package com.electronic.store.electronicstore.Controller;
 
 
 import com.electronic.store.electronicstore.Dtos.ApiResponsemessage;
+import com.electronic.store.electronicstore.Dtos.PageableResponse;
 import com.electronic.store.electronicstore.Dtos.UserDto;
 import com.electronic.store.electronicstore.Entity.User;
 import com.electronic.store.electronicstore.Service.UserService;
@@ -52,16 +53,16 @@ public class UserController {
 
 
     @GetMapping
-    public  ResponseEntity<List<UserDto>> getAllUser(
+    public  ResponseEntity<PageableResponse<UserDto>> getAllUser(
 
        @RequestParam( value="pageNumber", defaultValue = "0", required = false) int pageNumber,
        @RequestParam( value = "pageSize", defaultValue = "10",required = false) int pageSize,
-       @RequestParam( value="sortBy", defaultValue = "name", required = false) int SortBy,
-       @RequestParam( value = "sortDir", defaultValue = "asc",required = false) int SortDir ,
+       @RequestParam( value="sortBy", defaultValue = "name", required = false) String sortBy,
+       @RequestParam( value = "sortDir", defaultValue = "asc",required = false) String sortDir
 
     )
     {
-        return  new ResponseEntity<>(userService.getAllUsers(pageNumber,pageSize,SortBy,SortDir),HttpStatus.OK);
+        return  new ResponseEntity<>(userService.getAllUsers(pageNumber,pageSize,sortBy,sortDir),HttpStatus.OK);
     }
 
     @GetMapping("/{userId}")

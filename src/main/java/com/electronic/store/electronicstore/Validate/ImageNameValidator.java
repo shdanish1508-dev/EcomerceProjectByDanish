@@ -14,7 +14,8 @@ public class ImageNameValidator implements ConstraintValidator<ImageNameValid,St
     @Override
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public boolean isValid(String Value, ConstraintValidatorContext context) {
-        ,private Logger logger = LoggerFactory.getLogger(ImageNameValidator.class);
+
+        private Logger logger = LoggerFactory.getLogger(ImageNameValidator.class);
 
         logger.info("Message from IsValid: {}", Value);
 
