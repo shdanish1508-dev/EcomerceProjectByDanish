@@ -5,19 +5,29 @@ import lombok.*;
 
 import java.util.List;
 
+
+//public class PageableResponse<T> {
+//
+//    private List<T>content;
+//    private  int pageNumber;
+//    private  int pageSize;
+//    private  long totalElements;
+//    private int totalPages;
+//    private boolean lastpage;
+//
+//
+//}
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class PageableResponse<T> {
 
-    private List<T>content;
-    private  int pageNumber;
-    private  int pageSize;
-    private  long totalElements;
+    private List<T> content;
+    private int pageNumber;
+    private int pageSize;
+    private long totalElements;
     private int totalPages;
-    private boolean lastpage;
-
-
+    private boolean lastPage;
 }

@@ -9,14 +9,18 @@ import com.electronic.store.electronicstore.Repository.UserRepository;
 import com.electronic.store.electronicstore.Service.UserService;
 import org.hibernate.query.Page;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableArgumentResolver;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.ReadOnlyFileSystemException;
+import java.io.IOException;
+import java.nio.file.*;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -31,6 +35,11 @@ public class UserServiceImpl  implements UserService {
     private ModelMapper modelMapper;
     @Autowired
     private PageableArgumentResolver pageableArgumentResolver;
+
+    @Value("@{user.profile.image.path}")
+    private String imagePath;
+
+    private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -94,7 +103,28 @@ public class UserServiceImpl  implements UserService {
 
         User user=  userRepository.findById(userId).orElseThrow(()-> new ResourceNotfoundException("User Not found expection"));
 
+
+      String fullPath = imagePath+user.getImageName();
+
+
+
+           try
+           {
+               Path path= Paths.get(fullPath);
+               Files.delete(path);
+           }
+           catch (NoSuchFileException ex)
+           {
+                logger.info("Image not found in folder");
+           }
+           catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+
         userRepository.delete(user);
+
+
     }
 
     @Override

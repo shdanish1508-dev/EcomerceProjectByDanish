@@ -7,28 +7,45 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-public class ImageNameValidator implements ConstraintValidator<ImageNameValid,String>
-{
+//public class ImageNameValidator implements ConstraintValidator<ImageNameValid,String>
+//{
+//
+//
+//    @Override
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public boolean isValid(String Value, ConstraintValidatorContext context) {
+//
+//
+//        private Logger logger = LoggerFactory.getLogger(ImageNameValidator.class);
+//
+//        logger.info("Message from IsValid: {}", Value);
+//
+//
+//      if(Value.isBlank())
+//      {
+//          return false;
+//      }
+//      else {
+//          return true;
+//      }
+//
+//
+//       return false;
+//    }
+//}
 
+
+public class ImageNameValidator implements ConstraintValidator<ImageNameValid, String> {
 
     @Override
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public boolean isValid(String Value, ConstraintValidatorContext context) {
+    public boolean isValid(String value, ConstraintValidatorContext context) {
 
-        private Logger logger = LoggerFactory.getLogger(ImageNameValidator.class);
+        if (value == null || value.isBlank()) {
+            return false;
+        }
 
-        logger.info("Message from IsValid: {}", Value);
-
-
-      if(Value.isBlank())
-      {
-          return false;
-      }
-      else {
-          return true;
-      }
-
-
-       return false;
+        return value.endsWith(".png")
+                || value.endsWith(".jpg")
+                || value.endsWith(".jpeg");
     }
 }
